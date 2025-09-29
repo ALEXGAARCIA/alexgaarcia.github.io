@@ -1,1 +1,83 @@
-<h1>My Portfolio</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Tareas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    #contador {
+      font-weight: bold;
+      color: #007BFF;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    ul {
+      margin-top: 20px;
+    }
+    li {
+      background-color: #fff;
+      padding: 8px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Título principal -->
+  <h1>Lista de Tareas</h1>
+
+  <!-- Contador de tareas -->
+  <p>Tareas agregadas: <span id="contador">0</span></p>
+
+  <!-- Botón para agregar tareas -->
+  <button onclick="agregarTarea()">Agregar Tarea</button>
+
+  <!-- Contenedor de la lista de tareas -->
+  <ul id="lista-tareas">
+    <!-- Aquí se agregarán los elementos <li> -->
+  </ul>
+
+  <script>
+    // Variable global para llevar el conteo de tareas
+    let contador = 0;
+
+    // Función que se ejecuta al hacer clic en el botón
+    function agregarTarea() {
+      // Incrementa el contador
+      contador++;
+
+      // Crea un nuevo elemento <li>
+      const nuevaTarea = document.createElement("li");
+
+      // Asigna el texto "Tarea" seguido del número actual
+      nuevaTarea.textContent = "Tarea " + contador;
+
+      // Obtiene el contenedor de la lista por su ID
+      const lista = document.getElementById("lista-tareas");
+
+      // Agrega el nuevo <li> al <ul>
+      lista.appendChild(nuevaTarea);
+
+      // Obtiene el <span> del contador por su ID
+      const spanContador = document.getElementById("contador");
+
+      // Actualiza el texto del contador en pantalla
+      spanContador.textContent = contador;
+    }
+  </script>
+
+</body>
+</html>
