@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Lista de Tareas</title>
+  <title>Lista de Tareas y Registro</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -43,6 +43,34 @@
     li:hover {
       background-color: #e9f5ff;
     }
+    form {
+      margin-top: 40px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+    #tabla-registros {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #tabla-registros th, #tabla-registros td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    #tabla-registros th {
+      background-color: #007BFF;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -50,19 +78,40 @@
   <h1>Lista de Tareas</h1>
   <p>Tareas agregadas: <span id="contador">0</span></p>
   <button onclick="agregarTarea()">Agregar Tarea</button>
-
   <ul id="lista-tareas"></ul>
+
+  <h1>Formulario de Registro</h1>
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="number" id="edad" placeholder="Edad">
+    <input type="email" id="correo" placeholder="Correo Electrónico">
+    <button type="button" onclick="registrarDatos()">Registrar</button>
+    <button type="button" onclick="eliminarRegistro()">Eliminar Registro</button>
+  </form>
+
+  <div id="contenedor-tabla">
+    <table id="tabla-registros">
+      <thead>
+        <tr>
+          <th>Clave</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Correo</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
   <script>
     let contador = 0;
+    let registro = {};
 
     function agregarTarea() {
       contador++;
-
       const nuevaTarea = document.createElement("li");
       nuevaTarea.textContent = "Tarea " + contador;
 
-      // Permitir edición al hacer clic
       nuevaTarea.onclick = function() {
         const nuevoNombre = prompt("Cambiar nombre de la tarea:", nuevaTarea.textContent);
         if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
@@ -73,8 +122,58 @@
       document.getElementById("lista-tareas").appendChild(nuevaTarea);
       document.getElementById("contador").textContent = contador;
     }
+
+    function validarFormulario() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const edad = document.getElementById("edad").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      return nombre !== "" && edad !== "" && correo !== "";
+    }
+
+    function registrarDatos() {
+      if (!validarFormulario()) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      const clave = "registro_" + Date.now();
+      registro[clave] = {
+        nombre: document.getElementById("nombre").value.trim(),
+        edad: document.getElementById("edad").value.trim(),
+        correo: document.getElementById("correo").value.trim()
+      };
+
+      actualizarTabla();
+      document.getElementById("formulario").reset();
+    }
+
+    function actualizarTabla() {
+      const tbody = document.querySelector("#tabla-registros tbody");
+      tbody.innerHTML = "";
+
+      for (const clave in registro) {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${clave}</td>
+          <td>${registro[clave].nombre}</td>
+          <td>${registro[clave].edad}</td>
+          <td>${registro[clave].correo}</td>
+        `;
+        tbody.appendChild(fila);
+      }
+    }
+
+    function eliminarRegistro() {
+      const clave = prompt("Ingresa la clave del registro a eliminar:");
+      if (registro.hasOwnProperty(clave)) {
+        delete registro[clave];
+        actualizarTabla();
+        alert("Registro eliminado correctamente.");
+      } else {
+        alert("Clave no encontrada.");
+      }
+    }
   </script>
 
 </body>
 </html>
-
